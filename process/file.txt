@@ -1,0 +1,6 @@
+Hello from parent process!
+Hello from child process!
+Hello from parent process!
+Hello from child process!
+Hello from parent process!
+Hello from child process!
