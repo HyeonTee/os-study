@@ -16,19 +16,17 @@ typedef struct Queue {
     Process* processes[MAX_PROCESSES];
     int front;
     int rear;
-    int time_quantum;  // Time slice for this queue
+    int time_quantum;
 } Queue;
 
 Queue queues[QUEUE_LEVELS];
 
-// 큐 초기화
 void initialize_queue(Queue* queue, int time_quantum) {
     queue->front = 0;
     queue->rear = 0;
     queue->time_quantum = time_quantum;
 }
 
-// 프로세스를 큐에 추가
 void enqueue(Queue* queue, Process* process) {
     if (queue->rear < MAX_PROCESSES) {
         queue->processes[queue->rear] = process;
@@ -36,7 +34,6 @@ void enqueue(Queue* queue, Process* process) {
     }
 }
 
-// 큐에서 프로세스 제거
 Process* dequeue(Queue* queue) {
     if (queue->front < queue->rear) {
         return queue->processes[queue->front++];
@@ -44,12 +41,10 @@ Process* dequeue(Queue* queue) {
     return NULL;
 }
 
-// 큐가 비었는지 확인
 bool is_empty(Queue* queue) {
     return queue->front == queue->rear;
 }
 
-// 새로운 프로세스 생성
 Process* create_process(int id, int burst_time) {
     Process* process = (Process*)malloc(sizeof(Process));
     process->id = id;
@@ -58,7 +53,6 @@ Process* create_process(int id, int burst_time) {
     return process;
 }
 
-// MLFQ 스케줄링 함수
 void mlfq_schedule() {
     while (true) {
         bool all_queues_empty = true;
@@ -96,17 +90,14 @@ void mlfq_schedule() {
 }
 
 int main() {
-    // 큐 초기화
-    initialize_queue(&queues[0], 2);  // 큐 0은 2 단위 시간 할당
-    initialize_queue(&queues[1], 4);  // 큐 1은 4 단위 시간 할당
-    initialize_queue(&queues[2], 8);  // 큐 2는 8 단위 시간 할당
+    initialize_queue(&queues[0], 2);
+    initialize_queue(&queues[1], 4);
+    initialize_queue(&queues[2], 8);
 
-    // 샘플 프로세스 추가
-    enqueue(&queues[0], create_process(1, 10));  // 프로세스 1, 10 단위 시간
-    enqueue(&queues[0], create_process(2, 5));   // 프로세스 2, 5 단위 시간
-    enqueue(&queues[0], create_process(3, 8));   // 프로세스 3, 8 단위 시간
+    enqueue(&queues[0], create_process(1, 10));
+    enqueue(&queues[0], create_process(2, 5));
+    enqueue(&queues[0], create_process(3, 8));
 
-    // MLFQ 스케줄링 실행
     mlfq_schedule();
 
     return 0;
