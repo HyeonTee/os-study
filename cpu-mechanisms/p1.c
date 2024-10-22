@@ -25,7 +25,7 @@ int main() {
 
     pid = fork();
     if (pid < 0) {
-        perror("fork");
+        perror("fork failed");
         exit(1);
     } else if (pid == 0) {
         // 자식 프로세스
